@@ -74,7 +74,7 @@ class Blockchain {
         for (let i=1; i< this.chain.length; i++){
             const current = this.chain[i];
             const previous =  this.chain[i-1];
-                    //recompute hash from the block's current contents
+        //recompute hash from the block's current contents
         if (current.hash != current.calculateHash())
             return false;
         //ensure link matches previous block's actual hash
@@ -88,7 +88,7 @@ class Blockchain {
 /* ---------------------Demo--------------------- */
 function main() {
     // 1. create a chain
-    const demoCoin = new Blockchain(3);
+    const demoCoin = new Blockchain(5);
 
     // 2. add block with simple transactions
     console.log('Mining block #1 ...');
@@ -120,6 +120,41 @@ function main() {
         },
     ]));
 
+    console.log('Mining block #4 ...');
+    demoCoin.addBlock(new Block(4, Date.now().toString(), 
+    [
+        {
+            from: 'Indy',
+            to:'V',
+            amount: 30
+        },
+        {
+            from: 'V',
+            to:'Gabi',
+            amount: 30
+        },
+    ]));
+
+    console.log('Mining block #5 ...');
+    demoCoin.addBlock(new Block(5, Date.now().toString(), 
+    [
+        {
+            from: 'A',
+            to:'B',
+            amount: 10
+        },
+        {
+            from: 'B',
+            to:'C',
+            amount: 20
+        },
+        {
+            from: 'C',
+            to:'D',
+            amount: 30
+        },
+    ]));
+
     // 3. show the chain
     console.log('\n Full chain:');
     console.log(JSON.stringify(demoCoin, null, 2));
@@ -127,7 +162,7 @@ function main() {
     // 4. validate
     console.log('\n Is the chain valid?', demoCoin.isChainValid());
 
-    // 5. tamper test: modify data in block #1 and re-validate
+    // 5. tampered test: modify data in block #1 and re-validate
     console.log('\n tampering with block #1 data ...');
     demoCoin.chain[1].data.amount = 9999;
     console.log('is this valid after tamper?', demoCoin.isChainValid());
